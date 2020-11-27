@@ -40,7 +40,7 @@ async function run () {
     while (true) {
 
 		await page.waitForTimeout(2000)
-		await page.goto('https://secure.newegg.com/NewMyAccount/AccountLogin.aspx?nextpage=https%3a%2f%2fwww.newegg.com%2f' , {waitUntil: 'load' })
+		await page.goto('https://secure.newegg.ca/NewMyAccount/AccountLogin.aspx?nextpage=https%3a%2f%2fwww.newegg.ca%2f' , {waitUntil: 'load' })
 
 		if (page.url().includes('signin')) {
 
@@ -72,7 +72,8 @@ async function run () {
 				} 
 				catch (err) {
 					report("Manual authorization code required by Newegg.  This should only happen once.")
-					verificationPage = true;
+					break
+					//verificationPage = true;
 				}
 			}
 
@@ -121,7 +122,7 @@ async function run () {
 			}
 	
 			try {
-				await page.goto('https://secure.newegg.com/Shopping/AddtoCart.aspx?Submit=ADD&ItemList=' + config.item_number, { waitUntil: 'load' })
+				await page.goto('https://secure.newegg.ca/Shopping/AddtoCart.aspx?Submit=ADD&ItemList=' + config.item_number, { waitUntil: 'load' })
 				await page.waitForTimeout(1000)
 				try {
 					await page.waitForSelector('#bodyArea > section > div > div > div.message.message-success.message-added > div > div.item-added.fix > div.item-added-info', {timeout: 500})
@@ -209,8 +210,14 @@ async function run () {
 	// CONTINUE TO PAYMENT
 	while(true) {
 
+		let price;
 		try {
 			await page.waitForSelector('#app > div > section > div > div > form > div.row-inner > div.row-body > div > div:nth-child(2) > div > div.checkout-step-action > button', {timeout: 500})
+			price = await page.evaluate(() => document.querySelector('.summary-content-total > span > strong').innerText*1)
+			if(price > config.price_limit){
+				await report("ERROR: Price exceeds limit (" + price + ")");
+				break
+			}
 			await page.click('#app > div > section > div > div > form > div.row-inner > div.row-body > div > div:nth-child(2) > div > div.checkout-step-action > button')
 			break
 		} catch (err) {}
