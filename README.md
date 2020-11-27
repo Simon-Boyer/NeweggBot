@@ -13,7 +13,7 @@ Once that is finished, create a copy of config_template.json and name it config.
 - `refresh_time` refers to the duration to wait in seconds between add-to-cart attempts.  
 - `item_number` refers to Newegg's item number found at the end of the card page URL.  For example, the item number for 'https://www.newegg.com/evga-geforce-rtx-3080-10g-p5-3897-kr/p/N82E16814487518' is N82E16814487518.  This bot can attempt to multiple products. Example, 'item_number':'N82E16814137597,N82E16814487518'. The bot will purchase the first one it finds in stock. 
 - `auto_submit` refers to whether or not you want the bot to complete the checkout process.  Setting it to 'true' will result in the bot completing the purchase, while 'false' will result in it completing all the steps up to but not including finalizing the purchase.  It is mostly intended as a means to test that the bot is working without actually having it buy something.
-- `price_limit` refers to the maximum price that the bot will attempt to purchase a card for.  It is based on the combined subtotal of your cart. However, this version of the bot does not check this variable so do not bother setting a price. You should be sure you have the right product number and understand the price.  
+- `price_limit` refers to the maximum price that the bot will attempt to purchase a card for.  It is based on the combined subtotal of your cart + taxes + shipping.
 
 ## Usage
 After installation and configuration, the bot can then be run by using `node neweggbot.js`. 
